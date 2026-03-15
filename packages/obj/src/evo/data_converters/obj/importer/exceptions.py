@@ -1,4 +1,4 @@
-#  Copyright © 2025 Bentley Systems, Incorporated
+#  Copyright © 2026 Bentley Systems, Incorporated
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -9,10 +9,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from .exceptions import InvalidOBJError
-from .obj_to_evo import convert_obj
 
-__all__ = [
-    "convert_obj",
-    "InvalidOBJError",
-]
+class InvalidOBJError(Exception):
+    """Raised when the input OBJ file is invalid or cannot be parsed."""
