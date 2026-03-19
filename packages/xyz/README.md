@@ -48,7 +48,7 @@ The XYZ converter currently supports:
 
 ### Publish geoscience objects from an XYZ file(s)
 
-[The `evo-sdk-common` Python library](https://github.com/SeequentEvo/evo-data-converters/tree/main/packages/common) can be used to sign in. After successfully signing in, the user can select an organisation, an Evo hub, and a workspace. Use [`evo-objects`](https://github.com/SeequentEvo/evo-python-sdk/tree/main/packages/evo-objects) to get an `ObjectAPIClient`, and [`evo-data-converters-xyz`](https://github.com/SeequentEvo/evo-data-converters/tree/main/packages/geosoft-xyz) to convert your file.
+The [`evo-sdk-common`](https://github.com/SeequentEvo/evo-data-converters/tree/main/packages/common) Python library can be used to sign in. After successfully signing in, the user can select an organisation, an Evo hub, and a workspace. Use [`evo-objects`](https://github.com/SeequentEvo/evo-python-sdk/tree/main/packages/evo-objects) to get an `ObjectAPIClient`, and [`evo-data-converters-xyz`](https://github.com/SeequentEvo/evo-data-converters/tree/main/packages/geosoft-xyz) to convert your file.
 
 Have a look at the `code-samples/convert-xyz.ipynb` notebook for an example of how to publish XYZ files.
 
