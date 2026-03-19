@@ -59,7 +59,7 @@ We rely on an open, friendly, inclusive environment. To help us ensure this rema
 ## License
 Evo data converters are open source and licensed under the [Apache 2.0 license.](./LICENSE.md)
 
-Copyright © 2025 Bentley Systems, Incorporated.
+Copyright © 2026 Bentley Systems, Incorporated.
 
 Licensed under the Apache License, Version 2.0 (the "License").
 You may obtain a copy of the License at
