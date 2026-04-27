@@ -86,6 +86,9 @@ def __get_type(file_path: str) -> XYZ_Type:
 
             if num_values_space == 3:
                 return XYZ_Type.GEOSOFT_XYZ
+            
+            if num_values_space == 4 and values_space[3].replace(".", "", 1).lstrip("-").isdigit():
+                return XYZ_Type.GEOSOFT_XYZ_DATA
 
             return XYZ_Type.UNKNOWN
 
@@ -101,6 +104,7 @@ def __get_list_of_string_values(line: str, type: XYZ_Type) -> list[str]:
     - BINARY:             splits on comma, appends "0.0" → ["10.1", "10.2", "0.0"]
     - GEOCHEMISTRY_COMMA: splits on comma, drops the leading label → ["10.1", "10.2", "10.3"]
     - GEOCHEMISTRY_SPACE: splits on whitespace, drops the leading label → ["10.1" "10.2" "10.3"]
+    - GEOSOFT_XYZ_DATA:   splits on whitespace, takes first 3 values → ["10.1" "10.2" "10.3"]
     """
     if type == XYZ_Type.POINTS:
         return [v.strip() for v in line.split(",")]
@@ -120,5 +124,9 @@ def __get_list_of_string_values(line: str, type: XYZ_Type) -> list[str]:
     if type == XYZ_Type.GEOCHEMISTRY_SPACE:
         # First token is the label (e.g. "C"), remaining 3 are coordinates
         return line.split()[1:]
+    
+    if type == XYZ_Type.GEOSOFT_XYZ_DATA:
+        # First 3 tokens are coordinates, 4th is a data value to ignore
+        return line.split()[:3]
 
     raise ValueError(f"Unsupported XYZ type: {type}")
