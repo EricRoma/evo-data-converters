@@ -86,7 +86,7 @@ def __get_type(file_path: str) -> XYZ_Type:
 
             if num_values_space == 3:
                 return XYZ_Type.GEOSOFT_XYZ
-            
+
             if num_values_space == 4 and values_space[3].replace(".", "", 1).lstrip("-").isdigit():
                 return XYZ_Type.GEOSOFT_XYZ_DATA
 
@@ -124,7 +124,7 @@ def __get_list_of_string_values(line: str, type: XYZ_Type) -> list[str]:
     if type == XYZ_Type.GEOCHEMISTRY_SPACE:
         # First token is the label (e.g. "C"), remaining 3 are coordinates
         return line.split()[1:]
-    
+
     if type == XYZ_Type.GEOSOFT_XYZ_DATA:
         # First 3 tokens are coordinates, 4th is a data value to ignore
         return line.split()[:3]
