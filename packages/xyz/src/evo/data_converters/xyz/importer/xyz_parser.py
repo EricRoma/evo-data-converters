@@ -24,7 +24,14 @@ from .xyz_reader import read_xyz
 from .xyz_parquet_manager import save_array_to_parquet, save_1d_array_to_parquet
 
 
-def parse_xyz_file(filepath: str, data_client: ObjectDataClient, x_index: int = -1, y_index: int = -1, z_index: int = -1, data_index: int = -1) -> Pointset_V1_3_0:
+def parse_xyz_file(
+    filepath: str,
+    data_client: ObjectDataClient,
+    x_index: int = -1,
+    y_index: int = -1,
+    z_index: int = -1,
+    data_index: int = -1,
+) -> Pointset_V1_3_0:
     name = os.path.basename(filepath)
     filename_hash = hashlib.sha256(os.path.basename(filepath).encode()).hexdigest().lower()
 
@@ -50,12 +57,14 @@ def parse_xyz_file(filepath: str, data_client: ObjectDataClient, x_index: int = 
         data_parquet_path = os.path.join(str(data_client.cache_location), data_hash)
         save_1d_array_to_parquet(xyz.data, data_parquet_path)
         data_values = FloatArray1_V1_0_1(data=data_hash, length=len(xyz.data))
-        attributes = [ContinuousAttribute_V1_1_0(
-            name="data",
-            key="data",
-            nan_description=NanContinuous_V1_0_1(values=[-1.0e32]),
-            values=data_values,
-        )]
+        attributes = [
+            ContinuousAttribute_V1_1_0(
+                name="data",
+                key="data",
+                nan_description=NanContinuous_V1_0_1(values=[-1.0e32]),
+                values=data_values,
+            )
+        ]
 
     location = Pointset_V1_3_0_Locations(coordinates=floatArr, attributes=attributes)
 

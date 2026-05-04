@@ -19,4 +19,3 @@ import numpy.typing as npt
 class XYZData:
     points: npt.NDArray[np.float64] = field(default_factory=lambda: np.empty(0, dtype=np.float64))
     data: list[float] = field(default_factory=list)
-

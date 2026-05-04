@@ -44,7 +44,9 @@ def convert_xyz(
         evo_workspace_metadata=evo_workspace_metadata, service_manager_widget=service_manager_widget
     )
 
-    pointset = parse_xyz_file(filepath, data_client, x_index=x_index, y_index=y_index, z_index=z_index, data_index=data_index)
+    pointset = parse_xyz_file(
+        filepath, data_client, x_index=x_index, y_index=y_index, z_index=z_index, data_index=data_index
+    )
 
     pointset.tags = {
         "Source": f"{os.path.basename(filepath)} (via Evo Data Converters)",

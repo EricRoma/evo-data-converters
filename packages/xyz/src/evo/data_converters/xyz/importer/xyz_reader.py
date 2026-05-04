@@ -16,6 +16,7 @@ from .xyz_data import XYZData
 
 DUMMY = "-1.0e32"
 
+
 def _is_header_line(line: str) -> bool:
     """Return True if the line is a header and should be skipped.
 
@@ -25,11 +26,11 @@ def _is_header_line(line: str) -> bool:
     return not line[0].isdigit() and line[0] not in (".", "+", "-")
 
 
-def read_xyz(file_path: str, x_index: int , y_index: int , z_index: int , data_index: int) -> XYZData:
+def read_xyz(file_path: str, x_index: int, y_index: int, z_index: int, data_index: int) -> XYZData:
     rows: list[list[float]] = []
     data_values: list[str] = []
 
-    xyz_type = __get_type(file_path, z_index = z_index, data_index = data_index)
+    xyz_type = __get_type(file_path, z_index=z_index, data_index=data_index)
     if xyz_type == XYZ_Type.UNKNOWN:
         raise ValueError("Unsupported XYZ file type")
 
@@ -47,7 +48,7 @@ def read_xyz(file_path: str, x_index: int , y_index: int , z_index: int , data_i
             if xyz_type in (XYZ_Type.GEOSOFT_BYNARY_XYZ_DATA, XYZ_Type.GEOSOFT_XYZ_TRIPLET_DATA):
                 data_value = __get_string_data_value(stripped, xyz_type, data_index)
                 data_values.append(data_value)
-                     
+
             try:
                 row = [float(v) for v in values]
             except ValueError as exc:
@@ -63,14 +64,16 @@ def read_xyz(file_path: str, x_index: int , y_index: int , z_index: int , data_i
             data = [float(v) for v in data_values]
         except ValueError as exc:
             raise ValueError(f"Invalid data value") from exc
-    else:        
+    else:
         data = []
 
     return XYZData(points=points, data=data)
 
-def __replace_stars_for_dummies(values: list[str])-> list[str]:
+
+def __replace_stars_for_dummies(values: list[str]) -> list[str]:
     """Replace any '*' in the list of string values with a dummy value to allow numeric parsing."""
     return [x if x != "*" else DUMMY for x in values]
+
 
 def __get_type(file_path: str, z_index: int, data_index: int) -> XYZ_Type:
     """Determine the XYZ file type by inspecting the first non-header, non-empty line.
@@ -114,16 +117,16 @@ def __get_type(file_path: str, z_index: int, data_index: int) -> XYZ_Type:
             if num_values_space == 4 and not values_space[0].replace(".", "", 1).lstrip("-").isdigit():
                 return XYZ_Type.GEOCHEMISTRY_SPACE
 
-            #if only 2 values, consider x and y, if three values and a data_index, consider x_index, y_index, data_index and set z to 0
+            # if only 2 values, consider x and y, if three values and a data_index, consider x_index, y_index, data_index and set z to 0
             if num_values_space == 2:
                 return XYZ_Type.GEOSOFT_BYNARY_XYZ
-            
+
             if num_values_space >= 3 and data_index != -1 and z_index == -1:
                 return XYZ_Type.GEOSOFT_BYNARY_XYZ_DATA
-            
+
             if num_values_space == 3 or (num_values_space >= 3 and data_index == -1):
                 return XYZ_Type.GEOSOFT_XYZ_TRIPLET
-            
+
             if num_values_space >= 3:
                 return XYZ_Type.GEOSOFT_XYZ_TRIPLET_DATA
 
@@ -131,7 +134,8 @@ def __get_type(file_path: str, z_index: int, data_index: int) -> XYZ_Type:
 
     return XYZ_Type.UNKNOWN
 
-def __get_list_of_string_values(line: str, type: XYZ_Type, x_index: int , y_index: int , z_index: int) -> list[str]:
+
+def __get_list_of_string_values(line: str, type: XYZ_Type, x_index: int, y_index: int, z_index: int) -> list[str]:
     """Extract exactly 3 coordinate string values from a line based on the XYZ type.
 
     Always returns a list of 3 strings representing [x, y, z].
@@ -167,59 +171,60 @@ def __get_list_of_string_values(line: str, type: XYZ_Type, x_index: int , y_inde
 
         if x_index >= len(values) or y_index >= len(values):
             raise ValueError(f"Invalid x_index or y_index for line: '{line}'")
-        
+
         values.append("0.0")
-        
+
         if x_index == -1 and y_index == -1:
             return values[:3]
         else:
             return [values[x_index], values[y_index], "0.0"]
-        
+
     if type == XYZ_Type.GEOSOFT_BYNARY_XYZ_DATA:
         values = line.split()
 
         if x_index >= len(values) or y_index >= len(values):
             raise ValueError(f"Invalid x_index or y_index for line: '{line}'")
-        
+
         if x_index == -1 and y_index == -1:
             return [values[0], values[1], "0.0"]
         else:
             return [values[x_index], values[y_index], "0.0"]
-    
+
     if type == XYZ_Type.GEOSOFT_XYZ_TRIPLET:
         values = line.split()
 
         if x_index >= len(values) or y_index >= len(values) or z_index >= len(values):
             raise ValueError(f"Invalid x_index, y_index, or z_index for line: '{line}'")
-        
+
         if x_index == -1 and y_index == -1 and z_index == -1:
             return values[:3]
-        
+
         return [values[x_index], values[y_index], values[z_index]]
-    
+
     if type == XYZ_Type.GEOSOFT_XYZ_TRIPLET_DATA:
         values = line.split()
 
         if x_index >= len(values) or y_index >= len(values) or z_index >= len(values):
             raise ValueError(f"Invalid x_index, y_index, or z_index for line: '{line}'")
-        
+
         if x_index == -1 and y_index == -1:
             return [values[0], values[1], values[z_index]]
-        
+
         return [values[x_index], values[y_index], values[z_index]]
 
     raise ValueError(f"Unsupported XYZ type: {type}")
 
-def __get_string_data_value(line: str, type: XYZ_Type, data_index: int) -> str:
 
+def __get_string_data_value(line: str, type: XYZ_Type, data_index: int) -> str:
     if type not in (XYZ_Type.GEOSOFT_BYNARY_XYZ_DATA, XYZ_Type.GEOSOFT_XYZ_TRIPLET_DATA):
-        raise ValueError(f"Data index is only supported for GEOSOFT_BYNARY_XYZ_DATA and GEOSOFT_XYZ_TRIPLET_DATA types, got {type}")
-    
+        raise ValueError(
+            f"Data index is only supported for GEOSOFT_BYNARY_XYZ_DATA and GEOSOFT_XYZ_TRIPLET_DATA types, got {type}"
+        )
+
     values = line.split()
 
     if data_index >= len(values):
         raise ValueError(f"Invalid data_index for line: '{line}'")
-    
 
     if data_index == -1 and type == XYZ_Type.GEOSOFT_BYNARY_XYZ_DATA:
         value = values[2]  # data is in position 2 when x_index/y_index are -1 and z is padded as "0.0"
