@@ -10,7 +10,6 @@
 #  limitations under the License.
 
 import numpy as np
-import numpy.typing as npt
 from .xyz_types import XYZ_Type
 from .xyz_data import XYZData
 
@@ -63,7 +62,7 @@ def read_xyz(file_path: str, x_index: int, y_index: int, z_index: int, data_inde
         try:
             data = [float(v) for v in data_values]
         except ValueError as exc:
-            raise ValueError(f"Invalid data value") from exc
+            raise ValueError("Invalid data value") from exc
     else:
         data = []
 

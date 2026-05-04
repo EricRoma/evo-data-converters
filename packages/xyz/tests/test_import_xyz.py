@@ -103,6 +103,7 @@ def _assert_pointset(ps, min_x, min_y, min_z, max_x, max_y, max_z, n, has_data):
 
 # binary_located.XYZ — GEOSOFT_BYNARY_XYZ
 
+
 def test_binary_default() -> None:
     ps = _run_convert("binary_located.XYZ")
     _assert_pointset(ps, -4.48, -1.4, 0.0, 4.48, 1.4, 0.0, 180, False)
@@ -114,6 +115,7 @@ def test_binary_custom_xy() -> None:
 
 
 # triplet_located.XYZ — GEOSOFT_XYZ_TRIPLET
+
 
 def test_triplet_default() -> None:
     ps = _run_convert("triplet_located.XYZ")
@@ -127,6 +129,7 @@ def test_triplet_custom_xyz() -> None:
 
 # triplet_located.XYZ — GEOSOFT_BYNARY_XYZ_DATA
 
+
 def test_triplet_data_default() -> None:
     ps = _run_convert("triplet_located.XYZ", data_index=2)
     _assert_pointset(ps, -4.48, -1.4, 0.0, 4.48, 1.4, 0.0, 180, True)
@@ -138,6 +141,7 @@ def test_triplet_data_custom_xy() -> None:
 
 
 # full_located.XYZ — GEOSOFT_XYZ_TRIPLET
+
 
 def test_full_default() -> None:
     ps = _run_convert("full_located.XYZ")
@@ -151,12 +155,14 @@ def test_full_custom_xyz() -> None:
 
 # full_located.XYZ — GEOSOFT_BYNARY_XYZ_DATA
 
+
 def test_full_data_default() -> None:
     ps = _run_convert("full_located.XYZ", data_index=10)
     _assert_pointset(ps, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 180, True)
 
 
 # full_located.XYZ — GEOSOFT_XYZ_TRIPLET_DATA
+
 
 def test_full_data_custom_z() -> None:
     ps = _run_convert("full_located.XYZ", z_index=2, data_index=10)
